@@ -1,0 +1,10 @@
+main.c:68:6:Turn_Led_On	16	static
+main.c:76:6:Traffic_Lights	16	static
+main.c:118:6:display7SEG_x	24	static
+main.c:130:6:horizontal_timer	16	static
+main.c:148:6:display7SEG_y	24	static
+main.c:160:6:vertical_timer	16	static
+main.c:194:5:main	8	static
+main.c:241:6:SystemClock_Config	72	static
+main.c:277:13:MX_GPIO_Init	32	static
+main.c:327:6:Error_Handler	4	static,ignoring_inline_asm
