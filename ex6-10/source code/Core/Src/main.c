@@ -194,11 +194,14 @@ int main(void)
 	  //update the time state
 	  second++;
 	  UpdateTime(&hour, &minute, &second);
-	  HAL_Delay(10);// small delay value for better observation
+
+	  HAL_GPIO_TogglePin(HEART_GPIO_Port, HEART_Pin); //STM32's heart beats every 10ms
+	  HAL_Delay(50);// small delay value for FASTER observation
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
 }
+
 
 /**
   * @brief System Clock Configuration
@@ -248,16 +251,19 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, leg0_Pin|leg1_Pin|leg2_Pin|leg3_Pin
-                          |leg4_Pin|leg5_Pin|leg6_Pin|leg7_Pin
-                          |leg8_Pin|leg9_Pin|leg10_Pin|leg11_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, HEART_Pin|leg0_Pin|leg1_Pin|leg2_Pin
+                          |leg3_Pin|leg4_Pin|leg5_Pin|leg6_Pin
+                          |leg7_Pin|leg8_Pin|leg9_Pin|leg10_Pin
+                          |leg11_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : leg0_Pin leg1_Pin leg2_Pin leg3_Pin
-                           leg4_Pin leg5_Pin leg6_Pin leg7_Pin
-                           leg8_Pin leg9_Pin leg10_Pin leg11_Pin */
-  GPIO_InitStruct.Pin = leg0_Pin|leg1_Pin|leg2_Pin|leg3_Pin
-                          |leg4_Pin|leg5_Pin|leg6_Pin|leg7_Pin
-                          |leg8_Pin|leg9_Pin|leg10_Pin|leg11_Pin;
+  /*Configure GPIO pins : HEART_Pin leg0_Pin leg1_Pin leg2_Pin
+                           leg3_Pin leg4_Pin leg5_Pin leg6_Pin
+                           leg7_Pin leg8_Pin leg9_Pin leg10_Pin
+                           leg11_Pin */
+  GPIO_InitStruct.Pin = HEART_Pin|leg0_Pin|leg1_Pin|leg2_Pin
+                          |leg3_Pin|leg4_Pin|leg5_Pin|leg6_Pin
+                          |leg7_Pin|leg8_Pin|leg9_Pin|leg10_Pin
+                          |leg11_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

@@ -70,6 +70,8 @@ void Error_Handler(void);
 #define LED_YELLOW_Y_GPIO_Port GPIOA
 #define LED_RED_Y_Pin GPIO_PIN_6
 #define LED_RED_Y_GPIO_Port GPIOA
+#define HEART_Pin GPIO_PIN_0
+#define HEART_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

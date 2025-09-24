@@ -49,7 +49,7 @@
 int count_x = 10;
 int count_y = 10;
 int counter = 0;
-uint8_t digit_bits[10] = {
+uint8_t digit_bits[10] = { // Binary notation
 		0b1111110,//0
 		0b0110000,//1
 		0b1101101,//2
@@ -64,7 +64,7 @@ uint8_t digit_bits[10] = {
 
 
 
-//LIGHT CONTROL
+///----- LIGHTS CONTROL -----///
 void Turn_Led_On(uint16_t ledOn, uint16_t ledOff1, uint16_t ledOff2)
 {
 	//function to turn on 1 led and turn off others
@@ -73,7 +73,7 @@ void Turn_Led_On(uint16_t ledOn, uint16_t ledOff1, uint16_t ledOff2)
 	HAL_GPIO_WritePin(LIGHT_PORT, ledOff2, SET);
 }
 
-void Traffic_Lights(int *count_x, int *count_y)
+void Traffic_Lights(int *count_x, int *count_y) //CONTROLING THE LIGHTS
 {
 	// RESET COUNTDOWNS
 		  if(*count_x == 0) *count_x = 10;
@@ -113,8 +113,8 @@ void Traffic_Lights(int *count_x, int *count_y)
 }
 
 
-//TIMER CONTROL
-//HORIZONTAL TIMER//
+///----- TIMER CONTROL -----///
+//--- HORIZONTAL TIMER ---//
 void display7SEG_x(int n)
 {
 	uint8_t bits_of_n = digit_bits[n];
@@ -144,7 +144,8 @@ void horizontal_timer(int count_x)
 	}
 }
 
-//VERTICAL_TIMER//
+
+//--- VERTICAL TIMER ---//
 void display7SEG_y(int n)
 {
 	uint8_t bits_of_n = digit_bits[n];
@@ -228,6 +229,8 @@ int main(void)
 	  Traffic_Lights(&count_x, &count_y);
 	  horizontal_timer(count_x);
 	  vertical_timer(count_y);
+
+	  HAL_GPIO_TogglePin(HEART_GPIO_Port, HEART_Pin);
 	  HAL_Delay(1000);
 	  /* USER CODE BEGIN 3 */
   }
@@ -284,7 +287,7 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, LED_RED_X_Pin|LED_YELLOW_X_Pin|LED_GREEN_X_Pin|LED_GREEN_Y_Pin
-                          |LED_YELLOW_Y_Pin|LED_RED_Y_Pin, GPIO_PIN_RESET);
+                          |LED_YELLOW_Y_Pin|LED_RED_Y_Pin|HEART_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, ax_Pin|bx_Pin|cx_Pin|cy_Pin
@@ -293,9 +296,9 @@ static void MX_GPIO_Init(void)
                           |ay_Pin|by_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : LED_RED_X_Pin LED_YELLOW_X_Pin LED_GREEN_X_Pin LED_GREEN_Y_Pin
-                           LED_YELLOW_Y_Pin LED_RED_Y_Pin */
+                           LED_YELLOW_Y_Pin LED_RED_Y_Pin HEART_Pin */
   GPIO_InitStruct.Pin = LED_RED_X_Pin|LED_YELLOW_X_Pin|LED_GREEN_X_Pin|LED_GREEN_Y_Pin
-                          |LED_YELLOW_Y_Pin|LED_RED_Y_Pin;
+                          |LED_YELLOW_Y_Pin|LED_RED_Y_Pin|HEART_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

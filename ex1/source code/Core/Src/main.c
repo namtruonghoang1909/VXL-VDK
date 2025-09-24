@@ -94,21 +94,24 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    /* USER CODE END WHILE */
-	  if (count == 0) count = 2; // 2 second countdown - reaches 0 then reset count
+	if (count == 0) count = 2; // 2 second countdown - reaches 0 then reset count
 
-	        if (count == 2)
-	        {
-	            ledState = !ledState; //toggle led state
+	if (count == 2)
+	{
+		ledState = !ledState; //toggle led state
 
-	            HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, ledState ? GPIO_PIN_SET : GPIO_PIN_RESET);
-	            HAL_GPIO_WritePin(LED_YELLOW_GPIO_Port, LED_YELLOW_Pin, !ledState ? GPIO_PIN_SET : GPIO_PIN_RESET);
-	        }
+		HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, ledState ? GPIO_PIN_SET : GPIO_PIN_RESET);
+		HAL_GPIO_WritePin(LED_YELLOW_GPIO_Port, LED_YELLOW_Pin, !ledState ? GPIO_PIN_SET : GPIO_PIN_RESET);
+	}
 
-	        count--;
-	        HAL_Delay(1000);
-    /* USER CODE BEGIN 3 */
+	count--;
+	HAL_GPIO_TogglePin(HEART_GPIO_Port, HEART_Pin);// PA3 heart_led
+	HAL_Delay(1000);
+
   }
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
   /* USER CODE END 3 */
 }
 
@@ -160,10 +163,10 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, LED_RED_Pin|LED_YELLOW_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, HEART_Pin|LED_RED_Pin|LED_YELLOW_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : LED_RED_Pin LED_YELLOW_Pin */
-  GPIO_InitStruct.Pin = LED_RED_Pin|LED_YELLOW_Pin;
+  /*Configure GPIO pins : HEART_Pin LED_RED_Pin LED_YELLOW_Pin */
+  GPIO_InitStruct.Pin = HEART_Pin|LED_RED_Pin|LED_YELLOW_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;

@@ -43,7 +43,7 @@
 
 /* USER CODE BEGIN PV */
 int counter = 0;
-uint8_t digit_bits[10] = {
+uint8_t digit_bits[10] = { // Binary notation for each number on 7SEG
 		0b1111110,//0
 		0b0110000,//1
 		0b1101101,//2
@@ -57,7 +57,7 @@ uint8_t digit_bits[10] = {
 };
 /* USER CODE END PV */
 //FUNCTIONS
-void display7SEG(int n)
+void display7SEG(int n) // if a bit value at 2 corresponding position = 1, that segment turns on
 {
 	uint8_t bits_of_n = digit_bits[n];
 	HAL_GPIO_WritePin(SEG_PORT, a_Pin, (bits_of_n & 0b1000000) != 0 ? GPIO_PIN_RESET : GPIO_PIN_SET);
@@ -116,8 +116,10 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-	  if(counter >= 10) counter = 0;
+	  if(counter >= 10) counter = 0; //0 to 9 then back to 0
 	  display7SEG(counter++);
+
+	  HAL_GPIO_TogglePin(HEART_GPIO_Port, HEART_Pin);
 	  HAL_Delay(1000);
     /* USER CODE BEGIN 3 */
   }
@@ -169,21 +171,31 @@ static void MX_GPIO_Init(void)
   GPIO_InitTypeDef GPIO_InitStruct = {0};
 
   /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, a_Pin|b_Pin|c_Pin|d_Pin|e_Pin
-                          |f_Pin|g_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(HEART_GPIO_Port, HEART_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : a_Pin b_Pin d_Pin e_Pin
-                           f_Pin g_Pin */
-  GPIO_InitStruct.Pin = a_Pin|b_Pin|c_Pin|d_Pin|e_Pin
-                          |f_Pin|g_Pin;
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, a_Pin|b_Pin|c_Pin|d_Pin
+                          |e_Pin|f_Pin|g_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : HEART_Pin */
+  GPIO_InitStruct.Pin = HEART_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(HEART_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : a_Pin b_Pin c_Pin d_Pin
+                           e_Pin f_Pin g_Pin */
+  GPIO_InitStruct.Pin = a_Pin|b_Pin|c_Pin|d_Pin
+                          |e_Pin|f_Pin|g_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
 
 }
 

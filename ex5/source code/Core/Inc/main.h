@@ -86,6 +86,8 @@ void Error_Handler(void);
 #define fy_GPIO_Port GPIOB
 #define gy_Pin GPIO_PIN_14
 #define gy_GPIO_Port GPIOB
+#define HEART_Pin GPIO_PIN_15
+#define HEART_GPIO_Port GPIOA
 #define dx_Pin GPIO_PIN_3
 #define dx_GPIO_Port GPIOB
 #define ex_Pin GPIO_PIN_4

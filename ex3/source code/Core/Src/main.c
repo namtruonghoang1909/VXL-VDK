@@ -36,13 +36,7 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-void Turn_Led_On(uint16_t ledOn, uint16_t ledOff1, uint16_t ledOff2)
-{
-	//function to turn on 1 led and turn off others
-	HAL_GPIO_WritePin(GPIOA, ledOn, RESET);
-	HAL_GPIO_WritePin(GPIOA, ledOff1, SET);
-	HAL_GPIO_WritePin(GPIOA, ledOff2, SET);
-}
+
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -56,7 +50,45 @@ int count_y = 10;
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 /* USER CODE BEGIN PFP */
+void Turn_Led_On(uint16_t ledOn, uint16_t ledOff1, uint16_t ledOff2)
+{
+	//function to turn on 1 led and turn off others
+	HAL_GPIO_WritePin(GPIOA, ledOn, RESET);
+	HAL_GPIO_WritePin(GPIOA, ledOff1, SET);
+	HAL_GPIO_WritePin(GPIOA, ledOff2, SET);
+}
 
+
+void Horizontal_Lights(int timer)
+{
+	if(timer > 5)
+	{
+	  Turn_Led_On(LED_RED_X_Pin, LED_YELLOW_X_Pin, LED_GREEN_X_Pin);
+	}
+	else if(timer > 2)
+	{
+	  Turn_Led_On(LED_GREEN_X_Pin, LED_RED_X_Pin, LED_YELLOW_X_Pin);
+	}
+	else if(timer > 0)
+	{
+	  Turn_Led_On(LED_YELLOW_X_Pin, LED_RED_X_Pin, LED_GREEN_X_Pin);
+	}
+}
+void Vertical_Lights(int timer)
+{
+	if(count_y > 7)
+	{
+	  Turn_Led_On(LED_GREEN_Y_Pin, LED_RED_Y_Pin, LED_YELLOW_Y_Pin);
+	}
+	else if(count_y >5)
+	{
+	  Turn_Led_On(LED_YELLOW_Y_Pin, LED_GREEN_Y_Pin, LED_RED_Y_Pin);
+	}
+	else if(count_y > 0)
+	{
+	  Turn_Led_On(LED_RED_Y_Pin, LED_GREEN_Y_Pin, LED_YELLOW_Y_Pin);
+	}
+}
 
 
 /* USER CODE END PFP */
@@ -102,42 +134,22 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  // RESET COUNTDOWNS
-	  if(count_x == 0) count_x = 10;
-	  if(count_y == 0) count_y = 10;
+	// RESET COUNTDOWNS
+	if(count_x == 0) count_x = 10;
+	if(count_y == 0) count_y = 10;
 
-	  // HORIZONTAL LIGHTS//
-	  if(count_x > 5)
-	  {
-		  Turn_Led_On(LED_RED_X_Pin, LED_YELLOW_X_Pin, LED_GREEN_X_Pin);
-	  }
-	  else if(count_x > 2)
-	  {
-		  Turn_Led_On(LED_GREEN_X_Pin, LED_RED_X_Pin, LED_YELLOW_X_Pin);
-	  }
-	  else if(count_x > 0)
-	  {
-		  Turn_Led_On(LED_YELLOW_X_Pin, LED_RED_X_Pin, LED_GREEN_X_Pin);
-	  }
+	///----- HORIZONTAL LIGHTS -----///
+	Horizontal_Lights(count_x);
 
-	  //VERTICAL LIGHTS//
-	  if(count_y > 7)
-	  {
-		  Turn_Led_On(LED_GREEN_Y_Pin, LED_RED_Y_Pin, LED_YELLOW_Y_Pin);
-	  }
-	  else if(count_y >5)
-	  {
-		  Turn_Led_On(LED_YELLOW_Y_Pin, LED_GREEN_Y_Pin, LED_RED_Y_Pin);
-	  }
-	  else if(count_y > 0)
-	  {
-		  Turn_Led_On(LED_RED_Y_Pin, LED_GREEN_Y_Pin, LED_YELLOW_Y_Pin);
-	  }
+	///----- VERTICAL LIGHTS -----///
+	Vertical_Lights(count_y);
 
-	  //countdown
-	  count_x--;
-	  count_y--;
-	  HAL_Delay(1000);
+	//COUNTDOWN
+	count_x--;
+	count_y--;
+
+	HAL_GPIO_TogglePin(HEART_GPIO_Port, HEART_Pin); //STM32's heart beat
+	HAL_Delay(1000);
   }
   /* USER CODE END 3 */
 }
@@ -188,10 +200,14 @@ static void MX_GPIO_Init(void)
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, LED_RED_X_Pin|LED_YELLOW_X_Pin|LED_GREEN_X_Pin|LED_GREEN_Y_Pin
                           |LED_YELLOW_Y_Pin|LED_RED_Y_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(HEART_GPIO_Port, HEART_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : LED_RED_X_Pin LED_YELLOW_X_Pin LED_GREEN_X_Pin LED_GREEN_Y_Pin
                            LED_YELLOW_Y_Pin LED_RED_Y_Pin */
@@ -201,6 +217,13 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : HEART_Pin */
+  GPIO_InitStruct.Pin = HEART_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(HEART_GPIO_Port, &GPIO_InitStruct);
 
 }
 
@@ -241,3 +264,4 @@ void assert_failed(uint8_t *file, uint32_t line)
 #endif /* USE_FULL_ASSERT */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+

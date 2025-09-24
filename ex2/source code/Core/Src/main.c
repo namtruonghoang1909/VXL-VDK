@@ -19,6 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -98,25 +99,26 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-
   while (1)
   {
       if (count == 0) count = 10; //10 seconds countdown, reset count when reaches 0
 
-      if (count > 8)
+      if (count > 8) //RED on, YELLOW off, GREEN off
       {
     	  Turn_Led_On(GPIOA, LED_RED_Pin , LED_GREEN_Pin, LED_YELLOW_Pin); //red led turns on
       }
-      else if(count > 5)
+      else if(count > 5) //RED off, YELLOW on, GREEN off
       {
     	  Turn_Led_On(GPIOA, LED_YELLOW_Pin , LED_GREEN_Pin, LED_RED_Pin); //yellow led turns on
       }
-      else if (count > 0)
+      else if (count > 0) //RED off, YELLOW off, GREEN on
       {
     	  Turn_Led_On(GPIOA, LED_GREEN_Pin , LED_RED_Pin, LED_YELLOW_Pin); //green led turns on
       }
 
       count--;
+
+      HAL_GPIO_TogglePin(GPIOA, HEART_Pin); // stm32's heart beat
       HAL_Delay(1000);
   }
   /* USER CODE END 3 */
@@ -170,10 +172,10 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, LED_RED_Pin|LED_YELLOW_Pin|LED_GREEN_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, HEART_Pin|LED_RED_Pin|LED_YELLOW_Pin|LED_GREEN_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : LED_RED_Pin LED_YELLOW_Pin LED_GREEN_Pin */
-  GPIO_InitStruct.Pin = LED_RED_Pin|LED_YELLOW_Pin|LED_GREEN_Pin;
+  /*Configure GPIO pins : HEART_Pin LED_RED_Pin LED_YELLOW_Pin LED_GREEN_Pin */
+  GPIO_InitStruct.Pin = HEART_Pin|LED_RED_Pin|LED_YELLOW_Pin|LED_GREEN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
