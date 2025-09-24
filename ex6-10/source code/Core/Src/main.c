@@ -195,8 +195,8 @@ int main(void)
 	  second++;
 	  UpdateTime(&hour, &minute, &second);
 
-	  HAL_GPIO_TogglePin(HEART_GPIO_Port, HEART_Pin); //STM32's heart beats every 10ms
-	  HAL_Delay(50);// small delay value for FASTER observation
+	  HAL_GPIO_TogglePin(HEART_GPIO_Port, HEART_Pin); //STM32's heart beats every 100ms
+	  HAL_Delay(100);// small delay value for FASTER observation
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */

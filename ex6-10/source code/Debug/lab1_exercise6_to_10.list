@@ -511,15 +511,16 @@ int main(void)
  80003d4:	4805      	ldr	r0, [pc, #20]	; (80003ec <main+0x4c>)
  80003d6:	f7ff ffb9 	bl	800034c <UpdateTime>
 
-	  HAL_GPIO_TogglePin(HEART_GPIO_Port, HEART_Pin);
+	  HAL_GPIO_TogglePin(HEART_GPIO_Port, HEART_Pin); //STM32's heart beats every 100ms
  80003da:	2108      	movs	r1, #8
  80003dc:	4806      	ldr	r0, [pc, #24]	; (80003f8 <main+0x58>)
  80003de:	f000 fc05 	bl	8000bec <HAL_GPIO_TogglePin>
-	  HAL_Delay(1000);// small delay value for FASTER observation
- 80003e2:	f44f 707a 	mov.w	r0, #1000	; 0x3e8
- 80003e6:	f000 f967 	bl	80006b8 <HAL_Delay>
+	  HAL_Delay(100);// small delay value for FASTER observation
+ 80003e2:	2064      	movs	r0, #100	; 0x64
+ 80003e4:	f000 f968 	bl	80006b8 <HAL_Delay>
 	  ShowClock(hour, minute, second);
- 80003ea:	e7e3      	b.n	80003b4 <main+0x14>
+ 80003e8:	e7e4      	b.n	80003b4 <main+0x14>
+ 80003ea:	bf00      	nop
  80003ec:	20000040 	.word	0x20000040
  80003f0:	20000044 	.word	0x20000044
  80003f4:	20000048 	.word	0x20000048
